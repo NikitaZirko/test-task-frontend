@@ -20,35 +20,46 @@ const {items, single} = defineProps({
 const emit = defineEmits(['update:data']);
 const type = single ? 'radio' : 'checkbox';
 const selectVal = ref([]);
+const toArray = (val) => type === 'radio' ? [val] : val;
+const selectHandler = () => emit('update:data', toArray(selectVal.value));
 </script>
 
 <template lang="pug">
-ul.select
-    li(v-for="item in items" :key="item.id").select__item
-        label.select__label 
-            span {{ item.name }}
-            input.select__input(
-                :type="type" 
-                :value="item.id" 
-                v-model="selectVal" 
-                @change="emit('update:data', selectVal.value)")
+.select
+    ul.select__list
+        li(v-for="item in items" :key="item.id").select__item
+            label.select__label 
+                span {{ item.name }}
+                input.select__input(
+                    :type="type" 
+                    :value="item.name" 
+                    v-model="selectVal" 
+                    @change="selectHandler")
              
 </template>
 
 <style scoped lang="scss">
 @import "@/assets/styles/base/mixins.scss";
 
-
 .select {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 100px);
-    grid-gap: 10px;
-    justify-content: space-between;
-    grid-auto-rows: min-content;
     width: calc(50% - 5px);
-    padding: 10px;
-    border: 5px solid #555555;
-    box-sizing: border-box;
+
+    .select__list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 100px);
+        grid-gap: 10px;
+        justify-content: space-between;
+        grid-auto-rows: min-content;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        border: 5px solid #555555;
+        box-sizing: border-box;
+
+        @media (max-width: 600px) {
+            justify-content: center;
+        }
+    }
 
     .select__item {
         height: 100px;
@@ -63,7 +74,6 @@ ul.select
         width: 100%;
         height: 100%;
         min-height: auto;
-        background-color: #5274ff;
         cursor: pointer;
         transition: border .5s;
         border: 5px solid #555555;
@@ -77,10 +87,8 @@ ul.select
     .select__input {
         opacity: 0;
         position: absolute;
-    }
-
-    @media (max-width: 600px) {
-        justify-content: center;
+        top: -50px;
+        left: -50px;
     }
 }
 </style>

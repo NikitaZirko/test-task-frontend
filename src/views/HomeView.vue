@@ -7,7 +7,6 @@ import { ref } from "vue";
 
 const selectUserItems = ref([]);
 const selectOurItems = ref([]);
-
 </script>
 
 <template lang="pug">
@@ -15,10 +14,12 @@ const selectOurItems = ref([]);
     .card
         .card__display 
             ItemsDisplay(
-                :items="selectUserItems")
+                :items="selectUserItems"
+                :quantity="userItems.length")
 
             ItemsDisplay(
-                :items="selectOurItems")
+                :items="selectOurItems"
+                :single="true")
 
         .card__select
             ItemsSelect(
